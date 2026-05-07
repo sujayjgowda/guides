@@ -454,6 +454,162 @@
     color: var(--text-dim);
   }
 
+  /* Clock widget */
+  .clock-widget {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeDown 0.8s ease 0.8s both;
+  }
+
+  .clock-date-info {
+    text-align: right;
+    line-height: 1.2;
+  }
+
+  .clock-date-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+
+  .clock-date-day {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .clock-face {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1.5px solid rgba(0, 212, 255, 0.25);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 212, 255, 0.08), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .clock-face:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 212, 255, 0.45);
+  }
+
+  /* Tick marks */
+  .clock-tick {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    transform-origin: 0 0;
+  }
+
+  .clock-tick.major {
+    width: 1.5px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Hands */
+  .clock-hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: 50% 100%;
+    border-radius: 2px;
+  }
+
+  .clock-hand.hour {
+    width: 3px;
+    height: 28px;
+    background: #fff;
+    margin-left: -1.5px;
+    z-index: 3;
+  }
+
+  .clock-hand.minute {
+    width: 2px;
+    height: 38px;
+    background: #fff;
+    margin-left: -1px;
+    z-index: 4;
+  }
+
+  .clock-hand.second {
+    width: 1px;
+    height: 42px;
+    background: var(--accent-cyan);
+    margin-left: -0.5px;
+    z-index: 5;
+    box-shadow: 0 0 4px var(--accent-cyan);
+  }
+
+  .clock-center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+  }
+
+  @media (max-width: 640px) {
+    .clock-widget {
+      top: 10px;
+      right: 10px;
+      gap: 8px;
+    }
+
+    .clock-face {
+      width: 80px;
+      height: 80px;
+    }
+
+    .clock-hand.hour {
+      height: 18px;
+    }
+
+    .clock-hand.minute {
+      height: 25px;
+    }
+
+    .clock-hand.second {
+      height: 28px;
+    }
+
+    .clock-tick {
+      height: 5px;
+    }
+
+    .clock-tick.major {
+      height: 8px;
+    }
+
+    .clock-date-num {
+      font-size: 14px;
+    }
+
+    .clock-date-day {
+      font-size: 9px;
+    }
+  }
+
   /* Floating particles */
   .particle {
     position: fixed;
@@ -482,6 +638,21 @@
 </style>
 </head>
 <body>
+
+  <!-- Clock Widget -->
+  <div class="clock-widget" id="clockWidget">
+    <div class="clock-date-info">
+      <div class="clock-date-num" id="clockDateNum"></div>
+      <div class="clock-date-day" id="clockDateDay"></div>
+    </div>
+    <div class="clock-face" id="clockFace">
+      <!-- Ticks injected by JS -->
+      <div class="clock-hand hour" id="clockHour"></div>
+      <div class="clock-hand minute" id="clockMinute"></div>
+      <div class="clock-hand second" id="clockSecond"></div>
+      <div class="clock-center-dot"></div>
+    </div>
+  </div>
 
 <div class="container">
 
@@ -594,6 +765,57 @@
       p.style.boxShadow = `0 0 ${4 + Math.random() * 4}px currentColor`;
       body.appendChild(p);
     }
+  })();
+
+  // ── CLOCK ──
+  (function initClock() {
+    const face = document.getElementById('clockFace');
+    if (!face) return;
+    const hourEl = document.getElementById('clockHour');
+    const minEl = document.getElementById('clockMinute');
+    const secEl = document.getElementById('clockSecond');
+    const dateNum = document.getElementById('clockDateNum');
+    const dateDay = document.getElementById('clockDateDay');
+    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+    // Create tick marks
+    for (let i = 0; i < 12; i++) {
+      const tick = document.createElement('div');
+      tick.className = 'clock-tick' + ([0, 3, 6, 9].includes(i) ? ' major' : '');
+      const angle = i * 30;
+      const rad = (angle - 90) * Math.PI / 180;
+      const r = 54; // radius from center
+      const x = 60 + r * Math.cos(rad);
+      const y = 60 + r * Math.sin(rad);
+      tick.style.left = x + 'px';
+      tick.style.top = y + 'px';
+      tick.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+      face.appendChild(tick);
+    }
+
+    function update() {
+      const now = new Date();
+      const s = now.getSeconds();
+      const m = now.getMinutes();
+      const h = now.getHours() % 12;
+
+      const secAngle = s * 6;
+      const minAngle = m * 6 + s * 0.1;
+      const hrAngle = h * 30 + m * 0.5;
+
+      secEl.style.transform = `rotate(${secAngle}deg)`;
+      minEl.style.transform = `rotate(${minAngle}deg)`;
+      hourEl.style.transform = `rotate(${hrAngle}deg)`;
+
+      // Update date
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      dateNum.textContent = month + '/' + day;
+      dateDay.textContent = days[now.getDay()];
+    }
+
+    update();
+    setInterval(update, 1000);
   })();
 </script>
 
