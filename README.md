@@ -23,6 +23,12 @@ A complete roadmap from zero to hero for data analysis in the PV domain.
 - **Topics Covered:** Every clause, function & pattern — from SELECT to window functions. Includes JOINs, subqueries, CTEs, aggregate functions, indexing, DDL/DML, and real interview Q&A with PV-domain examples.
 - **Key Tags:** `SELECT · JOINs`, `Subqueries · CTEs`, `Window Functions`, `Performance`
 
+### 3. GAMP 5 Validation Guide
+A thorough guide to Good Automated Manufacturing Practice (GAMP 5) for the pharmaceutical industry.
+- **Scope:** Comprehensive · Validation
+- **Topics Covered:** Risk-based approaches, computer system validation life cycle, and compliance in the life sciences.
+- **Key Tags:** `Compliance`, `Validation`, `Risk Assessment`
+
 ## 🛠️ Technology Stack
 
 - **HTML5:** Semantic structure and content.
