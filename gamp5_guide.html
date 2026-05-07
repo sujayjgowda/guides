@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMP 5 — Complete Reference Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --deep: #0d1f3c;
+    --blue: #1a3a6b;
+    --accent: #c8a96e;
+    --gold: #e8c87a;
+    --silver: #b0bec5;
+    --white: #f5f0e8;
+    --cream: #faf6ef;
+    --text: #1c2b3a;
+    --muted: #5a6e82;
+    --success: #2e7d52;
+    --warn: #b06000;
+    --cat1: #4a6fa5;
+    --cat2: #2e8b57;
+    --cat3: #c47c00;
+    --cat4: #8b3a62;
+    --cat5: #b22222;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10, 22, 40, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(200,169,110,0.3);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1.1rem;
+    font-weight: 900;
+    white-space: nowrap;
+    padding: 1rem 1.5rem 1rem 0;
+    border-right: 1px solid rgba(200,169,110,0.2);
+    margin-right: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  nav a {
+    color: var(--silver);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 1rem 0.75rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--deep) 50%, #0f2744 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(200,169,110,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(26,58,107,0.4) 0%, transparent 50%);
+  }
+  .hero-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,169,110,0.4);
+    padding: 0.4rem 1.2rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.0;
+    position: relative; z-index: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--silver);
+    max-width: 680px;
+    margin: 1.5rem auto 3rem;
+    position: relative; z-index: 1;
+    font-style: italic;
+  }
+  .hero-meta {
+    display: flex; gap: 3rem; position: relative; z-index: 1;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .hero-meta-item { text-align: center; }
+  .hero-meta-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .hero-meta-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-top: 0.3rem;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  section + section { padding-top: 2rem; }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid rgba(26,58,107,0.2);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+  }
+  .section-intro {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 720px;
+    margin-bottom: 3rem;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.25rem;
+  }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border: 1px solid rgba(26,58,107,0.12);
+    border-radius: 4px;
+    padding: 2rem;
+    box-shadow: 0 2px 20px rgba(10,22,40,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(10,22,40,0.12);
+  }
+  .card-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--blue);
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin-bottom: 0.75rem;
+  }
+  .card p { color: var(--muted); font-size: 0.95rem; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+
+  /* CATEGORIES */
+  .category-stack { display: flex; flex-direction: column; gap: 1rem; }
+  .category-item {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: start;
+    gap: 1.5rem;
+    background: white;
+    border: 1px solid rgba(26,58,107,0.1);
+    border-radius: 4px;
+    padding: 1.5rem;
+    border-left: 4px solid var(--blue);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .category-item:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(10,22,40,0.08); }
+  .cat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.15;
+  }
+  .cat-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .cat-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .cat-examples {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: rgba(200,169,110,0.08);
+    padding: 0.5rem 0.75rem;
+    border-radius: 2px;
+    border: 1px solid rgba(200,169,110,0.2);
+  }
+  .cat-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    color: white;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .risk-low { background: #2e7d52; }
+  .risk-med { background: #b06000; }
+  .risk-high { background: #b22222; }
+
+  /* LIFECYCLE DIAGRAM */
+  .lifecycle-container {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .lifecycle-container::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(200,169,110,0.05) 0%, transparent 70%);
+  }
+  .lifecycle-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  .lifecycle-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .lifecycle-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    min-width: 100px;
+    max-width: 140px;
+    position: relative;
+  }
+  .lifecycle-icon {
+    width: 64px; height: 64px;
+    background: rgba(200,169,110,0.15);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    transition: background 0.3s;
+  }
+  .lifecycle-icon:hover { background: rgba(200,169,110,0.3); }
+  .lifecycle-step-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--silver);
+    line-height: 1.3;
+  }
+  .lifecycle-arrow {
+    font-size: 1.2rem;
+    color: var(--accent);
+    opacity: 0.6;
+    margin: 0 -0.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  /* V-MODEL */
+  .v-model-container {
+    background: white;
+    border: 1px solid rgba(26,58,107,0.12);
+    border-radius: 6px;
+    padding: 2.5rem;
+    margin: 2rem 0;
+  }
+  .v-model-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .v-model {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  .v-left, .v-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+  .v-right { align-items: flex-end; }
+  .v-step {
+    background: var(--navy);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    position: relative;
+  }
+  .v-step.left { border-left: 3px solid var(--gold); }
+  .v-step.right { border-right: 3px solid var(--accent); background: var(--blue); }
+  .v-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0.5rem;
+  }
+  .v-center-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    border-left: 2px dashed rgba(26,58,107,0.2);
+    padding-left: 0.5rem;
+  }
+
+  /* PROCESS TABLE */
+  .process-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .process-table th {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.85rem 1rem;
+    text-align: left;
+  }
+  .process-table td {
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    color: var(--text);
+    border-bottom: 1px solid rgba(26,58,107,0.08);
+  }
+  .process-table tr:nth-child(even) td { background: rgba(26,58,107,0.03); }
+  .process-table tr:hover td { background: rgba(200,169,110,0.06); }
+  .process-table .doc-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    background: rgba(26,58,107,0.1);
+    color: var(--blue);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* ASSESSMENT CARDS */
+  .assessment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .assessment-card {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(10,22,40,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .assessment-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(10,22,40,0.15); }
+  .assessment-header {
+    padding: 1.5rem;
+    color: white;
+  }
+  .assessment-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+  .assessment-header .sub { font-size: 0.8rem; opacity: 0.8; font-style: italic; }
+  .assessment-body { background: white; padding: 1.5rem; }
+  .assessment-body ul { list-style: none; }
+  .assessment-body li {
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+    border-bottom: 1px dashed rgba(26,58,107,0.1);
+    display: flex; gap: 0.5rem;
+  }
+  .assessment-body li::before { content: '→'; color: var(--accent); }
+
+  /* KEY CONCEPTS */
+  .concept-timeline { position: relative; padding-left: 2rem; }
+  .concept-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), var(--blue));
+  }
+  .concept-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid rgba(26,58,107,0.1);
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(10,22,40,0.05);
+  }
+  .concept-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem; top: 1.5rem;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px solid var(--cream);
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+  .concept-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .concept-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .concept-item p { font-size: 0.92rem; color: var(--muted); }
+  .concept-item .example-box {
+    background: rgba(200,169,110,0.06);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 3px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--warn);
+  }
+  .concept-item .example-box strong { color: var(--navy); font-family: 'Source Serif 4'; font-size: 0.82rem; }
+
+  /* BENEFITS */
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .benefit-item {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--navy);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .benefit-item::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--accent));
+  }
+  .benefit-item:hover { transform: translateY(-3px); }
+  .benefit-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .benefit-item h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .benefit-item p { font-size: 0.82rem; color: var(--silver); line-height: 1.5; }
+
+  /* STAGES */
+  .stages-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    border: 1px solid rgba(26,58,107,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 2rem 0;
+  }
+  .stage-item {
+    padding: 2rem 1.5rem;
+    background: white;
+    border-right: 1px solid rgba(26,58,107,0.1);
+    border-bottom: 1px solid rgba(26,58,107,0.1);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .stage-item:hover { background: rgba(26,58,107,0.03); }
+  .stage-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(26,58,107,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 1rem; right: 1rem;
+  }
+  .stage-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .stage-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+  .stage-item p { font-size: 0.83rem; color: var(--muted); }
+
+  /* VALIDATION KIT */
+  .kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .kit-item {
+    background: white;
+    border: 1px solid rgba(26,58,107,0.1);
+    border-radius: 4px;
+    padding: 1.25rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .kit-icon {
+    width: 40px; height: 40px; min-width: 40px;
+    background: rgba(26,58,107,0.08);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .kit-item h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--navy);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .kit-item p { font-size: 0.83rem; color: var(--muted); }
+
+  /* CALLOUT */
+  .callout {
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    border-radius: 6px;
+    padding: 2.5rem;
+    color: white;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .callout::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 10rem;
+    position: absolute;
+    top: -2rem; left: 1rem;
+    opacity: 0.05;
+    line-height: 1;
+  }
+  .callout p {
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--white);
+    position: relative; z-index: 1;
+  }
+  .callout cite {
+    display: block;
+    margin-top: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-style: normal;
+    position: relative; z-index: 1;
+  }
+
+  /* RISK MATRIX */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: auto repeat(3, 1fr);
+    gap: 4px;
+    max-width: 500px;
+    margin: 1.5rem auto;
+  }
+  .rm-header {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.6rem;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .rm-label {
+    background: var(--navy);
+    color: var(--silver);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    padding: 0.6rem;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 2px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .rm-cell {
+    padding: 0.75rem;
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+  }
+  .rm-low { background: #2e7d52; }
+  .rm-med { background: #b06000; }
+  .rm-high { background: #b22222; }
+  .rm-crit { background: #6b0000; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: var(--silver);
+    text-align: center;
+    padding: 3rem 2rem;
+    margin-top: 4rem;
+    border-top: 1px solid rgba(200,169,110,0.2);
+  }
+  footer .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  footer p { font-size: 0.85rem; opacity: 0.7; }
+
+  /* SECTION BACKGROUNDS */
+  .bg-dark {
+    background: var(--navy);
+    margin: 3rem 0;
+    padding: 4rem 0;
+  }
+  .bg-dark section { color: var(--white); }
+  .bg-dark .section-title { color: var(--gold); }
+  .bg-dark .section-intro { color: var(--silver); border-color: var(--accent); }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--silver);
+    opacity: 0.6;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .scroll-hint::after {
+    content: '';
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--silver), transparent);
+    animation: scrollDrop 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+    100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+  }
+
+  /* Example Box in cards */
+  .when-box {
+    background: rgba(46,125,82,0.08);
+    border-left: 3px solid var(--success);
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    border-radius: 0 3px 3px 0;
+  }
+  .when-box strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--success);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .when-box p { font-size: 0.85rem; color: var(--text); margin: 0; }
+
+  .how-box {
+    background: rgba(26,58,107,0.06);
+    border-left: 3px solid var(--blue);
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0 3px 3px 0;
+  }
+  .how-box strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .how-box p { font-size: 0.85rem; color: var(--text); margin: 0; }
+
+  @media (max-width: 700px) {
+    .v-model { flex-direction: column; align-items: stretch; }
+    .lifecycle-flow { gap: 0.5rem; }
+    .lifecycle-arrow { display: none; }
+    .category-item { grid-template-columns: 50px 1fr; }
+    .cat-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">GAMP 5</div>
+  <a href="#intro">Intro</a>
+  <a href="#standards">Standards</a>
+  <a href="#categories">Categories</a>
+  <a href="#benefits">Benefits</a>
+  <a href="#concepts">Key Concepts</a>
+  <a href="#lifecycle">Life Cycle</a>
+  <a href="#csv">CSV Process</a>
+  <a href="#kit">Val. Kit</a>
+  <a href="#customer">Customer Val.</a>
+  <a href="#assessments">Assessments</a>
+  <a href="#fiveconcepts">5 Concepts</a>
+  <a href="#stages">Stages</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Good Automated Manufacturing Practice</div>
+  <h1>GAMP <span>5</span></h1>
+  <p class="hero-sub">A Risk-Based Approach to Compliant GxP Computerized Systems — The complete practitioner's reference guide</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="hero-meta-num">5</div>
+      <div class="hero-meta-label">Software Categories</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-num">3</div>
+      <div class="hero-meta-label">Assessment Types</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-num">5</div>
+      <div class="hero-meta-label">Key Concepts</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-num">7</div>
+      <div class="hero-meta-label">Life Cycle Stages</div>
+    </div>
+  </div>
+  <div class="scroll-hint">Explore</div>
+</div>
+
+<!-- INTRODUCTION -->
+<section id="intro">
+  <div class="section-label">01 — Introduction</div>
+  <h2 class="section-title">What is GAMP 5?</h2>
+  <p class="section-intro">GAMP 5 (Good Automated Manufacturing Practice, 5th Edition) is an industry standard issued by ISPE that provides practical guidance for validating computerized systems used in GxP-regulated environments such as pharmaceutical, biotech, and medical device industries.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-tag">Origin</div>
+      <h3>Why GAMP Was Created</h3>
+      <p>Regulatory bodies such as the FDA, EMA, and WHO require that all computerized systems impacting product quality, patient safety, or data integrity be validated. GAMP 5 emerged as the industry's consensus framework to operationalize this requirement in a practical, risk-based way — replacing the outdated one-size-fits-all approach to validation.</p>
+      <div class="when-box">
+        <strong>When to Use</strong>
+        <p>Any time a computerized system is used in a GxP process — from LIMS and MES systems to ERP and laboratory equipment software.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Purpose</div>
+      <h3>Core Objectives</h3>
+      <p>GAMP 5 aims to ensure that computerized systems are fit for intended use, appropriately documented, and verifiably compliant. It promotes a scalable, science-based approach where the depth of validation effort is proportional to the complexity and risk of the system being validated.</p>
+      <div class="how-box">
+        <strong>How it Works</strong>
+        <p>By categorizing software, assessing risk, applying life cycle controls, and generating a documented audit trail — proving to regulators that systems are validated and maintained.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:2rem;">
+    <p>"GAMP 5 is not about validating software; it is about validating that the system is fit for its intended use in a regulated environment — with evidence, proportionate to risk."</p>
+    <cite>— ISPE GAMP 5 Guiding Principle</cite>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SOFTWARE VALIDATION STANDARDS -->
+<section id="standards">
+  <div class="section-label">02 — Regulatory Context</div>
+  <h2 class="section-title">Software Validation Standards</h2>
+  <p class="section-intro">GAMP 5 aligns with and operationalizes a set of global regulatory standards and guidelines that define legal requirements for computerized system validation in life sciences.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-tag">FDA</div>
+      <h3>21 CFR Part 11</h3>
+      <p>The U.S. FDA's regulation governing electronic records and electronic signatures. It sets criteria under which electronic records and signatures are considered trustworthy and equivalent to paper records. GAMP 5 directly addresses Part 11 compliance through audit trails, access controls, and data integrity practices.</p>
+      <div class="when-box"><strong>Applies When</strong><p>Systems create, modify, maintain, archive, or transmit electronic records in FDA-regulated activities.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">EU</div>
+      <h3>EU Annex 11</h3>
+      <p>The EU GMP Annex covering computerized systems used in regulated pharmaceutical manufacturing and quality systems. It requires validation, data integrity, audit trails, electronic signatures, and backup/recovery procedures. GAMP 5 serves as the primary guidance for achieving Annex 11 compliance.</p>
+      <div class="when-box"><strong>Applies When</strong><p>Operating in EU-regulated markets or manufacturing products exported to EU markets.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">WHO</div>
+      <h3>WHO Technical Report Series</h3>
+      <p>WHO's guidance documents on computerized systems and data integrity are harmonized with GAMP principles and apply to manufacturers supplying global markets, including prequalification for UN procurement.</p>
+      <div class="when-box"><strong>Applies When</strong><p>Seeking WHO prequalification or supplying medicines for UN/WHO-funded programs.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">ICH</div>
+      <h3>ICH Q10 — Pharmaceutical Quality System</h3>
+      <p>This guidance requires that pharmaceutical quality systems be supported by reliable data systems. GAMP 5's computerized system validation framework is the practical means of ensuring ICH Q10 compliance for electronic systems used in quality management.</p>
+      <div class="when-box"><strong>Applies When</strong><p>Establishing quality management systems with electronic controls and documentation.</p></div>
+    </div>
+  </div>
+
+  <div class="v-model-container" style="margin-top: 2rem;">
+    <div class="v-model-title">The V-Model in GAMP 5 — Design vs. Verification</div>
+    <div class="v-model">
+      <div class="v-left">
+        <div class="v-step left">📋 User Requirements Spec (URS)</div>
+        <div class="v-step left" style="margin-left:1.5rem;">🏗️ Functional Spec (FS)</div>
+        <div class="v-step left" style="margin-left:3rem;">⚙️ Design Spec (DS)</div>
+        <div class="v-step left" style="margin-left:4.5rem;">💻 Module / Code</div>
+      </div>
+      <div class="v-center">
+        <div class="v-center-label">Design → ← Verification</div>
+      </div>
+      <div class="v-right">
+        <div class="v-step right">✅ User Acceptance Testing (UAT)</div>
+        <div class="v-step right" style="margin-right:1.5rem;">🔬 Operational Qualification (OQ)</div>
+        <div class="v-step right" style="margin-right:3rem;">🔧 Installation Qualification (IQ)</div>
+        <div class="v-step right" style="margin-right:4.5rem;">🧪 Unit / Code Testing</div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.82rem; color:var(--muted); margin-top:1rem; font-style:italic;">Each left-side deliverable is verified by its corresponding right-side test, ensuring full traceability.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-label">03 — Software Classification</div>
+  <h2 class="section-title">GAMP 5 Software Categories 1–5</h2>
+  <p class="section-intro">GAMP 5 classifies software into five categories based on novelty, complexity, and the degree of supplier versus user configuration. This drives proportionate validation effort — more complex and custom software requires more rigorous validation.</p>
+
+  <div class="category-stack">
+    <div class="category-item" style="border-color: var(--cat1);">
+      <div class="cat-num" style="color:var(--cat1);">1</div>
+      <div class="cat-content">
+        <h3>Infrastructure Software</h3>
+        <p>Commercial software that provides the platform on which other systems run. It is not directly configured for specific business functions. The supplier is responsible for this software's integrity, and it is used "as is." Validation focuses on confirming correct installation and suitability for the environment.</p>
+        <div class="cat-examples">Examples: Operating Systems (Windows Server, Linux), Database engines (Oracle, MS SQL), Virtual machine platforms (VMware), Network services</div>
+        <div class="when-box" style="margin-top:0.75rem;"><strong>When to Use</strong><p>Validate through qualification of the IT environment, not through functional testing of the software itself. Obtain supplier documentation and confirm version suitability.</p></div>
+      </div>
+      <div><span class="cat-badge risk-low">Low Risk</span></div>
+    </div>
+
+    <div class="category-item" style="border-color: var(--cat2);">
+      <div class="cat-num" style="color:var(--cat2);">2</div>
+      <div class="cat-content">
+        <h3>Non-Configured Software (COTS)</h3>
+        <p>Commercial off-the-shelf (COTS) software that is used without any configuration or customization. The software operates exactly as delivered by the vendor. It is designed for a wide audience and not tailored to GxP use — examples include basic office tools used in ancillary processes.</p>
+        <div class="cat-examples">Examples: Microsoft Word (for SOP editing), Adobe Acrobat (for document control), Standard calculators, basic reporting tools</div>
+        <div class="when-box" style="margin-top:0.75rem;"><strong>When to Use</strong><p>Demonstrate fitness for intended use through supplier audit, documentation review, and limited functional testing. No customization testing needed.</p></div>
+      </div>
+      <div><span class="cat-badge risk-low">Low Risk</span></div>
+    </div>
+
+    <div class="category-item" style="border-color: var(--cat3);">
+      <div class="cat-num" style="color:var(--cat3);">3</div>
+      <div class="cat-content">
+        <h3>Configured Software</h3>
+        <p>COTS software that is configured to meet specific user and business requirements. The underlying software engine is maintained by the supplier, but the user defines workflows, parameters, master data, and processes. This is the most common category in the pharmaceutical industry.</p>
+        <div class="cat-examples">Examples: SAP ERP, Oracle EBS, Veeva Vault QMS, MasterControl, TrackWise, LIMS (LabWare, STARLIMS), Clinical Trial Management Systems (CTMS)</div>
+        <div class="when-box" style="margin-top:0.75rem;"><strong>When to Use</strong><p>Full CSV process required: URS, supplier assessment, risk assessment, IQ/OQ/PQ protocols, configuration testing, and training records. Focus testing on configured business workflows.</p></div>
+        <div class="how-box" style="margin-top:0.5rem;"><strong>How to Validate</strong><p>Test each configured process flow against requirements. Test boundary conditions. Verify audit trails, access controls, and data integrity controls function as configured.</p></div>
+      </div>
+      <div><span class="cat-badge risk-med">Medium Risk</span></div>
+    </div>
+
+    <div class="category-item" style="border-color: var(--cat4);">
+      <div class="cat-num" style="color:var(--cat4);">4</div>
+      <div class="cat-content">
+        <h3>Configured Products with Custom Extensions</h3>
+        <p>Software where the base product is configured AND custom code or modules are added on top of the standard platform. The custom extensions introduce additional risk because they are not covered by supplier testing. Both the configuration and the custom code must be validated.</p>
+        <div class="cat-examples">Examples: SAP with custom ABAP modules, Salesforce with custom Apex code, Veeva with custom workflows, custom plugins to standard QMS platforms</div>
+        <div class="when-box" style="margin-top:0.75rem;"><strong>When to Use</strong><p>All Cat 3 validation activities PLUS source code review, developer testing documentation, and change control for the custom elements. Requires involvement of the development team in validation.</p></div>
+        <div class="how-box" style="margin-top:0.5rem;"><strong>How to Validate</strong><p>Apply a software development life cycle (SDLC) to the custom code. Conduct design review, unit testing, integration testing, and regression testing when custom elements are changed.</p></div>
+      </div>
+      <div><span class="cat-badge risk-high">High Risk</span></div>
+    </div>
+
+    <div class="category-item" style="border-color: var(--cat5);">
+      <div class="cat-num" style="color:var(--cat5);">5</div>
+      <div class="cat-content">
+        <h3>Custom / Bespoke Software</h3>
+        <p>Software that is developed entirely from scratch to meet specific GxP needs. There is no pre-existing supplier base; the full development and validation burden rests with the user organization. This carries the highest risk and requires the most comprehensive validation effort, including a complete SDLC.</p>
+        <div class="cat-examples">Examples: In-house developed manufacturing execution systems, custom laboratory automation software, bespoke patient data management systems, proprietary regulatory submission tools</div>
+        <div class="when-box" style="margin-top:0.75rem;"><strong>When to Use</strong><p>Required when no commercial solution can meet GxP requirements. Justify the decision. Apply full SDLC: requirements → design → code → test → maintain.</p></div>
+        <div class="how-box" style="margin-top:0.5rem;"><strong>How to Validate</strong><p>Produce full specification suite (URS, FS, DS, module specs), execute all IQ/OQ/PQ phases, maintain source code under version control, and document all testing with traceability to requirements.</p></div>
+      </div>
+      <div><span class="cat-badge risk-high">Highest Risk</span></div>
+    </div>
+  </div>
+
+  <!-- Risk Matrix -->
+  <div style="margin-top: 3rem;">
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--navy); margin-bottom:1rem; text-align:center;">Risk vs. Effort Matrix</h3>
+    <div class="risk-matrix">
+      <div class="rm-header"></div>
+      <div class="rm-header">LOW Impact</div>
+      <div class="rm-header">MED Impact</div>
+      <div class="rm-header">HIGH Impact</div>
+      <div class="rm-label">LOW Probability</div>
+      <div class="rm-cell rm-low">Minimal</div>
+      <div class="rm-cell rm-low">Low</div>
+      <div class="rm-cell rm-med">Medium</div>
+      <div class="rm-label">MED Probability</div>
+      <div class="rm-cell rm-low">Low</div>
+      <div class="rm-cell rm-med">Medium</div>
+      <div class="rm-cell rm-high">High</div>
+      <div class="rm-label">HIGH Probability</div>
+      <div class="rm-cell rm-med">Medium</div>
+      <div class="rm-cell rm-high">High</div>
+      <div class="rm-cell rm-crit">Critical</div>
+    </div>
+    <p style="text-align:center; font-size:0.82rem; color:var(--muted); font-style:italic; margin-top:0.75rem;">Validation depth scales with risk score — proportionate and defensible.</p>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="section-label">04 — Why GAMP?</div>
+  <h2 class="section-title">Special Benefits of GAMP 5</h2>
+  <p class="section-intro">GAMP 5 delivers tangible operational and regulatory benefits. Understanding these benefits helps organizations justify the investment in a structured validation programme and communicate its value to leadership.</p>
+
+  <div class="benefits-grid">
+    <div class="benefit-item">
+      <div class="benefit-icon">⚖️</div>
+      <h4>Regulatory Confidence</h4>
+      <p>Provides a documented, defensible audit trail that satisfies FDA, EMA, and WHO inspectors — reducing the risk of 483 observations or warning letters.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🎯</div>
+      <h4>Proportionate Effort</h4>
+      <p>Risk-based approach ensures validation resources are invested where they matter most — eliminating wasted effort on low-risk systems.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🔒</div>
+      <h4>Data Integrity</h4>
+      <p>Ensures data is ALCOA+ compliant: Attributable, Legible, Contemporaneous, Original, Accurate — safeguarding product quality and patient safety.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🔄</div>
+      <h4>Change Control</h4>
+      <p>Structured change management prevents unvalidated changes from introducing risk into GxP systems — maintaining the validated state over the system's life.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">📊</div>
+      <h4>Business Continuity</h4>
+      <p>Validated systems with proper backup, recovery, and contingency procedures reduce business disruption from system failures.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🤝</div>
+      <h4>Supplier Leverage</h4>
+      <p>Structured supplier assessments and quality agreements shift appropriate responsibility to software vendors — reducing in-house testing burden.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">📉</div>
+      <h4>Reduced Recalls & Deviations</h4>
+      <p>Validated systems produce reliable data and controlled processes — directly reducing the frequency of quality failures, deviations, and product recalls.</p>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🌍</div>
+      <h4>Global Harmonization</h4>
+      <p>GAMP 5 aligns with FDA 21 CFR Part 11, EU Annex 11, PIC/S, WHO, and ICH — one framework satisfying multiple regulatory jurisdictions.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- KEY CONCEPTS -->
+<section id="concepts">
+  <div class="section-label">05 — Foundational Theory</div>
+  <h2 class="section-title">Key Concepts of GAMP 5</h2>
+  <p class="section-intro">GAMP 5 is built on a set of interlocking foundational concepts. Understanding these is essential before applying any specific GAMP tool or process — they explain the "why" behind every validation activity.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-tag">Core</div>
+      <h3>Risk-Based Approach</h3>
+      <p>The central pillar of GAMP 5. Risk assessment determines what validation activities are needed and at what level of depth. Systems with high potential impact on patient safety or product quality receive the most rigorous validation. Low-risk systems receive proportionately less.</p>
+      <div class="when-box"><strong>When Applied</strong><p>At every stage — from initial system assessment through retirement. Every decision about testing scope, documentation depth, and change control is driven by risk.</p></div>
+      <div class="how-box"><strong>How to Implement</strong><p>Use formal FMEA or risk ranking tools. Document risk assessment reports. Link risks to test protocols. Review residual risks after mitigation.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Core</div>
+      <h3>Scalable Life Cycle</h3>
+      <p>GAMP 5 does not prescribe a fixed set of documents or tests. Instead, it defines a life cycle framework that each organization scales up or down based on software category, system complexity, and risk profile. This makes it applicable to a simple COTS tool or a complex bespoke system.</p>
+      <div class="when-box"><strong>When Applied</strong><p>During planning — to decide which phases, documents, and testing strategies to apply to a given project.</p></div>
+      <div class="how-box"><strong>How to Implement</strong><p>Prepare a Validation Plan that defines the scope, deliverables, and rationale for the chosen approach. Get it approved before starting.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Core</div>
+      <h3>Intended Use</h3>
+      <p>Validation is always tied to the system's intended use in a specific context. The same software might be used differently in different roles — each use case may require separate validation consideration. GAMP 5 insists that what is being validated is the use, not just the software.</p>
+      <div class="when-box"><strong>When Applied</strong><p>When writing URS. When defining test scope. When evaluating supplier documentation for relevance to your specific use case.</p></div>
+      <div class="how-box"><strong>How to Implement</strong><p>State the intended use explicitly in the Validation Plan and URS. Map every test case back to a specific use requirement.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Core</div>
+      <h3>Supplier Involvement</h3>
+      <p>GAMP 5 recognizes that much of the quality assurance work for software is performed by the supplier during development. Rather than re-doing this work, the user organization should assess, leverage, and give appropriate credit for supplier testing — focusing their own effort on configuration-specific and use-case-specific testing.</p>
+      <div class="when-box"><strong>When Applied</strong><p>Before purchasing a system. During qualification. When assessing whether to reuse supplier test evidence.</p></div>
+      <div class="how-box"><strong>How to Implement</strong><p>Conduct Supplier Audits or send questionnaires. Review design specifications, test protocols, and test summaries. Document which supplier evidence is accepted and why.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- LIFECYCLE -->
+<section id="lifecycle">
+  <div class="section-label">06 — Structured Process</div>
+  <h2 class="section-title">The Life Cycle Approach</h2>
+  <p class="section-intro">GAMP 5 mandates a structured life cycle for every validated system — from the initial concept through to retirement. This ensures that validation is not a one-time event but a continuous, managed state maintained throughout the system's operational life.</p>
+
+  <div class="lifecycle-container">
+    <div class="lifecycle-title">GAMP 5 System Life Cycle</div>
+    <div class="lifecycle-flow">
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">💡</div>
+        <div class="lifecycle-step-name">Concept &amp; Initiation</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">📋</div>
+        <div class="lifecycle-step-name">Project Planning</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">🏗️</div>
+        <div class="lifecycle-step-name">Specification &amp; Design</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">⚙️</div>
+        <div class="lifecycle-step-name">Build &amp; Configure</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">🔬</div>
+        <div class="lifecycle-step-name">Testing &amp; Verification</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">🚀</div>
+        <div class="lifecycle-step-name">Release &amp; Go-Live</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">🔧</div>
+        <div class="lifecycle-step-name">Operation &amp; Maintenance</div>
+      </div>
+      <div class="lifecycle-arrow">›</div>
+      <div class="lifecycle-step">
+        <div class="lifecycle-icon">🗃️</div>
+        <div class="lifecycle-step-name">Retirement</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:2rem;">
+    <div class="card">
+      <div class="card-tag">Phase 1–2</div>
+      <h3>Concept & Planning</h3>
+      <p>Define the business need, assign a project team, perform an initial risk assessment, categorize the system (GAMP cat 1–5), identify regulatory requirements, and produce a Validation Plan. The Validation Plan is the master governing document for everything that follows.</p>
+      <div class="how-box"><strong>Key Deliverable</strong><p>Validation Plan (VP) — approved by QA before project proceeds.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Phase 3–4</div>
+      <h3>Specification & Build</h3>
+      <p>Produce the User Requirements Specification (URS), then trace those requirements through Functional and Design Specifications. For configured/custom systems, configuration is performed against the approved specifications, and configuration records are maintained.</p>
+      <div class="how-box"><strong>Key Deliverable</strong><p>URS, FS/DS, Configuration Records — all subject to version control and formal review.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Phase 5</div>
+      <h3>Testing & Verification</h3>
+      <p>Execute IQ (Installation Qualification), OQ (Operational Qualification), and PQ (Performance Qualification) protocols. Each test must be pre-approved, executed with actual results, and any deviations formally resolved before proceeding. Generate Test Summary Reports.</p>
+      <div class="how-box"><strong>Key Deliverable</strong><p>IQ/OQ/PQ Protocols, executed Test Scripts, Deviation Reports, Test Summary Reports.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Phase 6–8</div>
+      <h3>Release, Operate & Retire</h3>
+      <p>Issue a Validation Summary Report (VSR) and obtain formal QA approval before go-live. Thereafter, maintain the validated state through change control, periodic reviews, security management, backup/recovery testing, and incident management. At retirement, archive all records per regulatory retention requirements.</p>
+      <div class="how-box"><strong>Key Deliverable</strong><p>VSR, Change Requests, Periodic Review Reports, Retirement Plan.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CSV PROCESS -->
+<section id="csv">
+  <div class="section-label">07 — Core Process</div>
+  <h2 class="section-title">The CSV Process</h2>
+  <p class="section-intro">Computer System Validation (CSV) is the structured process by which an organization proves — with documented evidence — that a computerized system consistently does what it is supposed to do in a GxP context. GAMP 5 provides the framework for executing CSV proportionately.</p>
+
+  <table class="process-table">
+    <thead>
+      <tr>
+        <th>Step</th>
+        <th>Activity</th>
+        <th>Key Document</th>
+        <th>Who</th>
+        <th>Why It Matters</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>System Inventory & Categorization</td>
+        <td><span class="doc-tag">System Register</span></td>
+        <td>IT / QA</td>
+        <td>Know what systems exist, their GAMP category, and GxP impact</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Risk Assessment</td>
+        <td><span class="doc-tag">Risk Assessment Report</span></td>
+        <td>Validation Team</td>
+        <td>Determine validation depth required; identify critical functions</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Supplier Assessment</td>
+        <td><span class="doc-tag">Supplier Audit Report / Questionnaire</span></td>
+        <td>QA / Procurement</td>
+        <td>Leverage supplier quality system to reduce internal testing burden</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Validation Planning</td>
+        <td><span class="doc-tag">Validation Plan (VP)</span></td>
+        <td>Validation Lead</td>
+        <td>Define scope, approach, roles, schedule, and deliverables</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td>Requirements Specification</td>
+        <td><span class="doc-tag">URS / FS / DS</span></td>
+        <td>Business / IT</td>
+        <td>Formally document what the system must do — the baseline for all testing</td>
+      </tr>
+      <tr>
+        <td><strong>6</strong></td>
+        <td>Installation Qualification</td>
+        <td><span class="doc-tag">IQ Protocol & Report</span></td>
+        <td>IT / Validation</td>
+        <td>Verify the system is installed correctly in the correct environment</td>
+      </tr>
+      <tr>
+        <td><strong>7</strong></td>
+        <td>Operational Qualification</td>
+        <td><span class="doc-tag">OQ Protocol & Report</span></td>
+        <td>Validation Team</td>
+        <td>Verify the system operates according to specifications across all functions</td>
+      </tr>
+      <tr>
+        <td><strong>8</strong></td>
+        <td>Performance Qualification</td>
+        <td><span class="doc-tag">PQ Protocol & Report</span></td>
+        <td>Business / QA</td>
+        <td>Verify the system performs reliably under real-world operating conditions</td>
+      </tr>
+      <tr>
+        <td><strong>9</strong></td>
+        <td>Validation Summary & Release</td>
+        <td><span class="doc-tag">Validation Summary Report (VSR)</span></td>
+        <td>QA</td>
+        <td>Formal conclusion that the system is validated and approved for GxP use</td>
+      </tr>
+      <tr>
+        <td><strong>10</strong></td>
+        <td>Change Control & Periodic Review</td>
+        <td><span class="doc-tag">Change Request / Periodic Review</span></td>
+        <td>IT / QA</td>
+        <td>Maintain validated state throughout operational life of the system</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p>"Every CSV project starts with a risk question: what happens to product quality or patient safety if this system fails or produces wrong data? The answer defines how much validation is needed."</p>
+    <cite>— CSV Risk-Based Philosophy</cite>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- VALIDATION KIT -->
+<section id="kit">
+  <div class="section-label">08 — Documentation</div>
+  <h2 class="section-title">Validation Kit</h2>
+  <p class="section-intro">The Validation Kit is the complete set of documents generated during the CSV process. Together, these documents constitute the evidence that the system is validated, and they form the audit-ready package presented to regulators during inspections.</p>
+
+  <div class="kit-grid">
+    <div class="kit-item">
+      <div class="kit-icon">📝</div>
+      <div>
+        <h4>Validation Plan (VP)</h4>
+        <p>Master governance document defining scope, approach, deliverables, roles, and schedule. Approved by QA before work begins.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">📌</div>
+      <div>
+        <h4>User Requirements Specification (URS)</h4>
+        <p>Defines what the system must do from the user's perspective. Basis for all test script creation. Written in business language.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">🏗️</div>
+      <div>
+        <h4>Functional Spec (FS) / Design Spec (DS)</h4>
+        <p>How the system will be designed to meet the URS. FS = functional behavior; DS = technical architecture. Required for Cat 4 & 5.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">⚠️</div>
+      <div>
+        <h4>Risk Assessment Report</h4>
+        <p>Documents identified risks, their likelihood/impact, assigned mitigations, and residual risk. Drives testing depth and priorities.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">🔍</div>
+      <div>
+        <h4>Supplier Assessment Report</h4>
+        <p>Results of supplier audit or questionnaire. Identifies which supplier documents can be leveraged and accepted as evidence.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">🔧</div>
+      <div>
+        <h4>IQ Protocol & Report</h4>
+        <p>Pre-approved test procedure verifying correct installation of hardware, software, and network. Executed and signed off by IT and Validation.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">⚙️</div>
+      <div>
+        <h4>OQ Protocol & Report</h4>
+        <p>Tests that the system functions according to its specifications across all configured features. Most detailed testing phase.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">✅</div>
+      <div>
+        <h4>PQ Protocol & Report</h4>
+        <p>Verifies the system performs under real operational conditions — process simulations, volume testing, end-to-end workflow testing.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">⚡</div>
+      <div>
+        <h4>Deviation / Discrepancy Log</h4>
+        <p>Tracks all unexpected test results. Each deviation must be formally investigated, resolved, and reviewed by QA before proceeding.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">📊</div>
+      <div>
+        <h4>Traceability Matrix (RTM)</h4>
+        <p>Maps each URS requirement to its test scripts and test results — proving that every requirement was tested and passed.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">📃</div>
+      <div>
+        <h4>Validation Summary Report (VSR)</h4>
+        <p>Final document summarizing all validation activities, results, deviations resolved, and conclusion that the system is validated and fit for use.</p>
+      </div>
+    </div>
+    <div class="kit-item">
+      <div class="kit-icon">🎓</div>
+      <div>
+        <h4>Training Records</h4>
+        <p>Proof that all users and administrators have been trained on the validated system before going live. Required by 21 CFR Part 11 and Annex 11.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CUSTOMER VALIDATIONS -->
+<section id="customer">
+  <div class="section-label">09 — End-User Responsibility</div>
+  <h2 class="section-title">Customer Validations</h2>
+  <p class="section-intro">In GAMP 5, the regulated user (the "customer" of the software, whether buying from a vendor or deploying internally) retains ultimate regulatory responsibility for validating the system in their specific environment and use context — regardless of what the supplier has tested.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-tag">Principle</div>
+      <h3>Non-Transferable Responsibility</h3>
+      <p>No matter how thoroughly a supplier has validated their software, the regulated organization must verify that it works correctly in their specific infrastructure, with their specific configuration, for their specific business processes. Supplier testing covers the product; customer validation covers the use.</p>
+      <div class="when-box"><strong>When Applies</strong><p>Always — even for SaaS and cloud-hosted systems. Customer must validate their data, their workflows, and their configuration of the hosted tool.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">SaaS Era</div>
+      <h3>Cloud & SaaS Validation</h3>
+      <p>GAMP 5's 2022 supplement addresses cloud and SaaS systems specifically. The supplier manages the infrastructure (IQ equivalent), but the customer must still validate their configured workflows (OQ) and ensure their business processes perform correctly (PQ). Quality agreements with the cloud provider are essential.</p>
+      <div class="when-box"><strong>When Applies</strong><p>For any GxP SaaS tool — Veeva Vault, Medidata Rave, Microsoft 365 in regulated environments, cloud LIMS, etc.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Documentation</div>
+      <h3>What the Customer Must Produce</h3>
+      <p>Even when heavily leveraging supplier documentation, the customer organization must produce their own: Validation Plan, URS (their requirements in their words), Risk Assessment (their risk context), test protocols (their use cases), executed test records, and a Validation Summary Report signed by their QA.</p>
+      <div class="how-box"><strong>How to Do It</strong><p>Start with supplier docs and gap assess. Write your URS independent of supplier documentation. Your URS captures your needs — not a copy of the supplier's manual.</p></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Ongoing</div>
+      <h3>Maintaining Validated State</h3>
+      <p>After go-live, every change — upgrades, patches, configuration changes, process changes, infrastructure changes — must go through change control. The customer must assess impact, test as needed, and update their validation documentation. This is perpetual, not a one-time task.</p>
+      <div class="how-box"><strong>How to Do It</strong><p>Implement a formal Change Request process. Assess every change for validation impact. Use a categorized approach: minor changes = documentation update; major changes = re-testing.</p></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ASSESSMENTS -->
+<section id="assessments">
+  <div class="section-label">10 — Evaluation Types</div>
+  <h2 class="section-title">3 Types of Assessments in GAMP 5</h2>
+  <p class="section-intro">GAMP 5 defines three distinct types of assessments that are performed at different points in the system life cycle. Each serves a different purpose and produces different outputs that feed into the overall validation strategy.</p>
+
+  <div class="assessment-grid">
+    <div class="assessment-card">
+      <div class="assessment-header" style="background: linear-gradient(135deg, #1a3a6b, #2e5fa3);">
+        <h3>1. System Assessment</h3>
+        <div class="sub">GxP Impact & Category Determination</div>
+      </div>
+      <div class="assessment-body">
+        <p style="font-size:0.9rem; color:var(--muted); margin-bottom:1rem;">Performed at the beginning of any new or existing system evaluation. Determines whether the system is GxP-relevant, what GAMP category it falls into, and what regulatory requirements apply.</p>
+        <ul>
+          <li>Is the system GxP-relevant?</li>
+          <li>What GAMP category (1–5)?</li>
+          <li>What regulations apply?</li>
+          <li>What is the data criticality?</li>
+          <li>What validation approach is required?</li>
+        </ul>
+        <div class="when-box" style="margin-top:1rem;"><strong>When Used</strong><p>Before any new system implementation and periodically as part of system inventory reviews.</p></div>
+      </div>
+    </div>
+
+    <div class="assessment-card">
+      <div class="assessment-header" style="background: linear-gradient(135deg, #6b2e00, #c47c00);">
+        <h3>2. Risk Assessment</h3>
+        <div class="sub">Hazard Analysis & Mitigation Planning</div>
+      </div>
+      <div class="assessment-body">
+        <p style="font-size:0.9rem; color:var(--muted); margin-bottom:1rem;">Identifies and evaluates risks associated with the system's functions and use in a GxP context. Determines which functions are critical and drives the depth and scope of validation and testing activities.</p>
+        <ul>
+          <li>Identify critical functions (CFs)</li>
+          <li>Score risks (Likelihood × Impact)</li>
+          <li>Define mitigation controls</li>
+          <li>Determine residual risk acceptability</li>
+          <li>Link risks to test requirements</li>
+        </ul>
+        <div class="when-box" style="margin-top:1rem;"><strong>When Used</strong><p>After URS is drafted; before designing test protocols. Repeated when significant changes are made.</p></div>
+      </div>
+    </div>
+
+    <div class="assessment-card">
+      <div class="assessment-header" style="background: linear-gradient(135deg, #2e5a2e, #2e7d52);">
+        <h3>3. Supplier Assessment</h3>
+        <div class="sub">Vendor Qualification & Evidence Review</div>
+      </div>
+      <div class="assessment-body">
+        <p style="font-size:0.9rem; color:var(--muted); margin-bottom:1rem;">Evaluates the software supplier's quality management system, development practices, and available testing documentation. Determines what supplier evidence can be leveraged, reducing the user organization's internal testing effort.</p>
+        <ul>
+          <li>Does supplier have a QMS (ISO 9001)?</li>
+          <li>Is there documented SDLC evidence?</li>
+          <li>Are release notes and test reports available?</li>
+          <li>Is the supplier auditable?</li>
+          <li>What can be accepted as-is?</li>
+        </ul>
+        <div class="when-box" style="margin-top:1rem;"><strong>When Used</strong><p>Before purchasing software and periodically thereafter (typically every 2–3 years or on major releases).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- 5 KEY CONCEPTS -->
+<section id="fiveconcepts">
+  <div class="section-label">11 — Applied Principles</div>
+  <h2 class="section-title">5 Key Concepts Applied Through GAMP 5</h2>
+  <p class="section-intro">These five concepts cut across every phase of the GAMP 5 life cycle. They are not separate tools but rather lenses through which every validation decision must be viewed — ensuring that validation remains practical, defensible, and genuinely fit for purpose.</p>
+
+  <div class="concept-timeline">
+    <div class="concept-item">
+      <div class="concept-num">Concept 01 — Proportionality</div>
+      <h3>Scaled Effort Based on Risk</h3>
+      <p>Validation effort must be proportionate to the risk the system poses to product quality, patient safety, and data integrity. A system that controls critical manufacturing parameters requires far more rigorous validation than one that generates internal reports. This concept prevents both under-validation (regulatory risk) and over-validation (wasted resource).</p>
+      <div class="example-box">
+        <strong>Example:</strong> A temperature monitoring system in a GMP warehouse (Cat 3, high criticality) receives full IQ/OQ/PQ with alarm testing and 21 CFR Part 11 controls. A document template management tool (Cat 2, low criticality) receives a simple fitness-for-use check and supplier documentation review.
+      </div>
+    </div>
+
+    <div class="concept-item">
+      <div class="concept-num">Concept 02 — Life Cycle Thinking</div>
+      <h3>Validation as a Continuous State</h3>
+      <p>Validation is not an event — it is an ongoing state that must be actively maintained. From the moment a system is implemented to the day it is retired, it must remain in a validated state. Every change, update, or environmental modification must be assessed, controlled, and documented to maintain this state.</p>
+      <div class="example-box">
+        <strong>Example:</strong> When a cloud-hosted QMS receives an automatic update from the vendor, the customer organization must assess the update, test impacted workflows, update training materials if needed, and close the change request with QA approval before the update is considered validated.
+      </div>
+    </div>
+
+    <div class="concept-item">
+      <div class="concept-num">Concept 03 — Supplier Leverage</div>
+      <h3>Trust but Verify</h3>
+      <p>GAMP 5 explicitly encourages organizations to leverage supplier testing evidence rather than duplicating it. If a supplier can demonstrate they have a mature quality management system, follow a defined SDLC, and provide comprehensive test documentation, the user organization can accept this as evidence — provided it is assessed and accepted formally.</p>
+      <div class="example-box">
+        <strong>Example:</strong> A LIMS vendor provides ISO 9001 certification, release notes, and factory acceptance test reports for their software. After a supplier audit confirms their QMS maturity, the customer accepts the vendor's IQ-equivalent documentation and focuses their own testing on configured laboratory workflows.
+      </div>
+    </div>
+
+    <div class="concept-item">
+      <div class="concept-num">Concept 04 — Data Integrity (ALCOA+)</div>
+      <h3>Trustworthy Data at the Core</h3>
+      <p>Every GxP computerized system must ensure that data is: <strong>A</strong>ttributable (who created it?), <strong>L</strong>egible (can it be read?), <strong>C</strong>ontemporaneous (when was it recorded?), <strong>O</strong>riginal (is it the first capture?), <strong>A</strong>ccurate (is it correct?) — plus Complete, Consistent, Enduring, and Available (the '+' additions).</p>
+      <div class="example-box">
+        <strong>Example:</strong> A chromatography data system must record the actual analyst login (Attributable), timestamp data at acquisition (Contemporaneous), prevent editing of raw data (Original), and provide an audit trail of all changes with who made them and why (Complete + Accurate).
+      </div>
+    </div>
+
+    <div class="concept-item">
+      <div class="concept-num">Concept 05 — Science &amp; Quality Risk Management</div>
+      <h3>Evidence-Based Decision Making</h3>
+      <p>All validation decisions in GAMP 5 should be grounded in scientific understanding and quality risk management principles (aligned with ICH Q9). This means using structured risk tools (FMEA, Fishbone, hazard analysis), making decisions based on evidence rather than habit, and documenting the scientific rationale for every validation choice.</p>
+      <div class="example-box">
+        <strong>Example:</strong> Using FMEA, a validation team identifies that the batch release approval workflow in an ERP system has a high failure impact score. This drives a decision to test that workflow with five different user scenarios, including negative testing and permission-level boundary checks — proportionate to the evidence-based risk score.
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- STAGES -->
+<section id="stages">
+  <div class="section-label">12 — Implementation Roadmap</div>
+  <h2 class="section-title">Stages of GAMP 5</h2>
+  <p class="section-intro">GAMP 5 implementation follows defined stages that apply to every validated system project. These stages translate the life cycle concept into practical, executable project phases — each producing specific deliverables and regulatory evidence.</p>
+
+  <div class="stages-flow">
+    <div class="stage-item">
+      <div class="stage-num">1</div>
+      <div class="stage-icon">🔍</div>
+      <h4>Concept & Feasibility</h4>
+      <p>Identify the business need, assess initial GxP impact, select technology approach, and confirm regulatory requirements that will apply. Go/no-go decision point.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">2</div>
+      <div class="stage-icon">📋</div>
+      <h4>Project Planning & VP</h4>
+      <p>Assign the validation team, produce the Validation Plan, define scope and deliverables, establish a project timeline, and obtain QA approval before proceeding.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">3</div>
+      <div class="stage-icon">📌</div>
+      <h4>Requirements & Risk</h4>
+      <p>Produce the URS documenting all functional and non-functional requirements. Conduct formal risk assessment to prioritize critical functions and determine testing scope.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">4</div>
+      <div class="stage-icon">🤝</div>
+      <h4>Supplier Assessment</h4>
+      <p>Evaluate the software vendor's quality system. Accept or reject supplier evidence. Establish a quality agreement. Define what IQ/OQ credit can be given to supplier documentation.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">5</div>
+      <div class="stage-icon">🏗️</div>
+      <h4>Design & Configuration</h4>
+      <p>Produce Functional and Design Specifications (where required by category). Configure the system against approved specifications. Document all configuration settings with version control.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">6</div>
+      <div class="stage-icon">🧪</div>
+      <h4>Installation Qualification (IQ)</h4>
+      <p>Verify that the system is correctly installed in the target environment. Confirm hardware, software versions, network, and security settings match specifications. Execute and sign IQ report.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">7</div>
+      <div class="stage-icon">⚙️</div>
+      <h4>Operational Qualification (OQ)</h4>
+      <p>Test that the system operates according to specifications. Test all critical functions, boundary conditions, error handling, audit trails, access controls, and data integrity features.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">8</div>
+      <div class="stage-icon">🔬</div>
+      <h4>Performance Qualification (PQ)</h4>
+      <p>Test the system under real business conditions — full process simulations, volume tests, concurrent user testing, and end-to-end workflow execution by actual users or their proxies.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">9</div>
+      <div class="stage-icon">📊</div>
+      <h4>Validation Summary Report</h4>
+      <p>Compile all test results, deviation resolutions, and outstanding actions into a Validation Summary Report (VSR). QA formally reviews and approves. This document authorizes GxP use.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">10</div>
+      <div class="stage-icon">🚀</div>
+      <h4>Release & Go-Live</h4>
+      <p>Train all users, migrate data (with data migration validation if applicable), execute cutover plan, and formally release the system to production. Archive all validation documentation.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">11</div>
+      <div class="stage-icon">🔧</div>
+      <h4>Operational Maintenance</h4>
+      <p>Operate the system under change control. Conduct periodic reviews (typically annual). Manage incidents, security, backups, and access rights. Every change assessed for validation impact.</p>
+    </div>
+    <div class="stage-item">
+      <div class="stage-num">12</div>
+      <div class="stage-icon">🗃️</div>
+      <h4>Retirement & Archival</h4>
+      <p>When the system is decommissioned, produce a Retirement Plan. Migrate or archive all GxP data per regulatory retention periods. Ensure continued readability of archived records.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:2rem;">
+    <p>A system that is properly staged through all twelve GAMP 5 milestones leaves behind an irrefutable evidence package — the validation kit — that answers every inspector's question before it is asked: What did you build? What did you test? What went wrong? How did you fix it? And how do you know it still works today?</p>
+    <cite>— Validation Philosophy, GAMP 5 Life Cycle Approach</cite>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">GAMP 5</div>
+  <p>Good Automated Manufacturing Practice — 5th Edition</p>
+  <p style="margin-top:0.5rem;">Published by ISPE (International Society for Pharmaceutical Engineering) · For GxP Computerized System Validation</p>
+  <p style="margin-top:1rem; font-size:0.75rem; opacity:0.5;">This reference guide is for educational purposes. Always refer to the current ISPE GAMP 5 publication and applicable regulatory guidance for compliance decisions.</p>
+</footer>
+
+<script>
+  // Smooth active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          link.style.borderBottomColor = '';
+        });
+        const activeLink = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (activeLink) {
+          activeLink.style.color = '#e8c87a';
+          activeLink.style.borderBottomColor = '#e8c87a';
+        }
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  
+  sections.forEach(s => observer.observe(s));
+
+  // Category item color coding
+  const catColors = ['#4a6fa5','#2e8b57','#c47c00','#8b3a62','#b22222'];
+  document.querySelectorAll('.category-item').forEach((item, i) => {
+    item.style.borderLeftColor = catColors[i] || catColors[4];
+  });
+</script>
+</body>
+</html>
