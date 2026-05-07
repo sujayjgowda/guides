@@ -39,7 +39,7 @@ A thorough guide to Good Automated Manufacturing Practice (GAMP 5) for the pharm
 ## 🚀 Getting Started
 
 1. Clone or download the repository to your local machine.
-2. Open `index-2.html` (or your main index file) in any modern web browser (Chrome, Firefox, Safari, Edge).
+2. Open `index.html` (or your main index file) in any modern web browser (Chrome, Firefox, Safari, Edge).
 3. Click on the respective guide cards to navigate to the individual study materials.
 
 ## 📄 License
